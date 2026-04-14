@@ -42,7 +42,17 @@ Designed a Convolutional Neural Network (CNN), which is the standard for image r
 - **Pooling Layers:** These layers reduce the spatial size of the feature maps, keeping only the most important features and making the model more efficient.  
 - **Fully Connected Layers:** These layers combine the extracted features and produce the final classification output across the 10 land use categories.  
 
-### C. Explainability with Grad-CAM
+
+### C. Advanced Model: ResNet-18  
+
+Implemented a Residual Network (ResNet-18) to evaluate the impact of deeper 
+architectures and transfer learning.  
+
+- **Transfer Learning:** Leveraged pre-trained weights from the ImageNet dataset, allowing the model to start with an advanced understanding of complex visual patterns.  
+- **Adaptation:** The final fully connected layer was modified to output 10 classes to match the EuroSAT dataset categories.  
+- **Data Handling:** Images were upscaled to 224x224 pixels to meet the input requirements of the ResNet architecture. 
+
+### D. Explainability with Grad-CAM
 
 To improve interpretability, Grad-CAM (Gradient-weighted Class Activation Mapping) was used.
 
