@@ -1,74 +1,84 @@
-# SatelliteLandUseClassification
-Satellite Land Use Classification using CNN, Grad-CAM, and AI-Assisted  Interpretation - Deep Learning with Pytorch 
+<div align="center">
 
-## OBJECTIVE: 
+# Satellite Land Use Classification
+### CNN, ResNet-18 Transfer Learning, Grad-CAM & AI-Assisted Interpretation
 
-The goal of this project is to automatically classify different types of land use (such as forests, 
-rivers, highways, and residential areas) from satellite images using deep learning techniques. 
-The project also aims to provide visual and AI-based explanations to better understand how the 
-model makes its predictions.  
+![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)
+![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat-square&logo=pytorch&logoColor=white)
+![Gradio](https://img.shields.io/badge/Gradio-FF7C00?style=flat-square&logo=gradio&logoColor=white)
+![Gemini](https://img.shields.io/badge/Gemini%20API-4285F4?style=flat-square&logo=googlegemini&logoColor=white)
+![Status](https://img.shields.io/badge/Status-Complete-brightgreen?style=flat-square)
 
-## DATASET DESCRIPTION: 
+</div>
 
-The project uses the EuroSAT dataset, which contains approximately 27,000 satellite images 
-captured by the Sentinel-2 satellite.  
+---
 
-The dataset is divided into 10 land use categories, including Annual Crop, Forest, Herbaceous 
-Vegetation, Highway, Industrial, Pasture, Permanent Crop, Residential, River, and Sea Lake.  
+## 🎯 Objective
 
-Each image is 64×64 pixels, enabling efficient model training while preserving the visual features 
-needed for classification. 
+Automatically classify land use types (forests, rivers, highways, residential areas, and more) from satellite images using deep learning - and go a step further by making the model's decisions genuinely understandable, combining visual explanation (Grad-CAM) with AI-generated natural language explanation (Gemini).
 
-## PROBLEM STATEMENT: 
+## 📂 Dataset
 
-Satellite images contain valuable information about land use, but manually analyzing large 
-amounts of data is time-consuming and inefficient. This project aims to automate land use 
-classification using deep learning, making the process faster and more scalable. 
+**EuroSAT** - ~27,000 satellite images captured by the Sentinel-2 satellite, across **10 land use categories**: Annual Crop, Forest, Herbaceous Vegetation, Highway, Industrial, Pasture, Permanent Crop, Residential, River, and Sea Lake. Each image is 64×64 pixels, balancing efficient training with enough visual detail for classification.
 
-## METHODOLOGY
+## ❓ Problem Statement
 
-### A. Data Preprocessing
+Satellite images contain valuable land use information, but manually analyzing large volumes of imagery is slow and doesn't scale. This project automates land use classification with deep learning - and adds explainability, so predictions aren't a black box.
 
-Before training, the raw satellite images were prepared to ensure consistency and improve the model performance:
+---
 
-- **Resizing:** Every satellite image was resized to 64x64 pixels. This ensures the model receives data in a consistent shape.  
-- **Normalization:** Pixel values were normalized using a predefined mean and standard deviation. This helps stabilize training and prevents any single color channel from dominating the learning process.  
+## 🧪 Methodology
 
-### B. Model Architecture (SimpleCNN)
+### 1. Data Preprocessing
+- **Resizing:** all images standardized to 64×64 pixels
+- **Normalization:** pixel values normalized using a predefined mean and standard deviation, stabilizing training
 
-Designed a Convolutional Neural Network (CNN), which is the standard for image recognition.
+### 2. Baseline Model - SimpleCNN
+A convolutional neural network built from scratch:
+- **Convolutional layers** extract features like edges, textures, and shapes (roads, crops, buildings)
+- **Pooling layers** reduce spatial size while keeping the most important features
+- **Fully connected layers** combine extracted features into a final 10-class prediction
 
-- **Convolutional Layers:** These layers extract important features such as edges, textures, and shapes. Example: roads, crops, buildings.  
-- **Pooling Layers:** These layers reduce the spatial size of the feature maps, keeping only the most important features and making the model more efficient.  
-- **Fully Connected Layers:** These layers combine the extracted features and produce the final classification output across the 10 land use categories.  
+### 3. Advanced Model - ResNet-18 (Transfer Learning)
+- Pre-trained on ImageNet, giving the model a head start on complex visual patterns
+- Final fully connected layer adapted to output the 10 EuroSAT classes
+- Images upscaled to 224×224 to match ResNet's expected input size
 
+### 4. Explainability - Grad-CAM
+Grad-CAM (Gradient-weighted Class Activation Mapping) highlights which regions of an image most influenced the model's prediction, generating a heatmap (red = high importance, blue = low importance) - confirming the model focuses on meaningful land features, not background noise.
 
-### C. Advanced Model: ResNet-18  
+### 5. AI-Assisted Interpretation - Gemini API
+Beyond the heatmap, the **Gemini API** turns each prediction into a plain-language explanation - given a predicted class and confidence score, it generates a short, human-readable explanation of the result, making the model's output accessible to non-technical users.
 
-Implemented a Residual Network (ResNet-18) to evaluate the impact of deeper 
-architectures and transfer learning.  
+### 6. Interactive Interface - Gradio
+A full **Gradio web app** ties everything together: upload a satellite image and get back the predicted class, confidence score, Grad-CAM heatmap, and an AI-generated explanation - all in one interface.
 
-- **Transfer Learning:** Leveraged pre-trained weights from the ImageNet dataset, allowing the model to start with an advanced understanding of complex visual patterns.  
-- **Adaptation:** The final fully connected layer was modified to output 10 classes to match the EuroSAT dataset categories.  
-- **Data Handling:** Images were upscaled to 224x224 pixels to meet the input requirements of the ResNet architecture. 
+---
 
-### D. Explainability with Grad-CAM
+## 📊 Results
 
-To improve interpretability, Grad-CAM (Gradient-weighted Class Activation Mapping) was used.
+| Model | Test Accuracy |
+|---|---|
+| SimpleCNN (baseline) | 90.81% |
+| **ResNet-18 (transfer learning)** | **94.12%** |
 
-Grad-CAM analyzes the final convolutional layer and highlights the regions of the image that contributed most to the model’s prediction.
+The ResNet-18 model outperformed the CNN baseline, and its confusion matrix showed a much stronger diagonal - more accurate predictions across nearly all classes, with especially strong performance on visually distinct categories like Sea Lake and Residential. This demonstrates the real advantage transfer learning offers over training a smaller model from scratch, even on a relatively small 64×64 image dataset.
 
-It generates a heatmap, where:
+---
 
-- Red regions indicate high importance  
-- Blue regions indicate low importance  
+## 🛠️ Tech Stack
 
-This helps verify that the model is focusing on meaningful land features rather than irrelevant background areas.
+- **PyTorch** / **torchvision** - model architecture and training
+- **ResNet-18** (pre-trained, ImageNet weights) - transfer learning backbone
+- **Grad-CAM** - visual model explainability
+- **Google Gemini API** - natural language explanation generation
+- **Gradio** - interactive web interface
+- **scikit-learn** - evaluation metrics (classification report, confusion matrix)
 
-### D. AI-Assisted Interpretation
+## 🚀 How to Run
 
-To make the model outputs more understandable, the Gemini API was integrated.
+Open [`Pytorch_Capstone_Final_Version.ipynb`](Pytorch_Capstone_Final_Version.ipynb) in Google Colab (GPU runtime recommended), and run the cells in order. You'll need:
+- A **Kaggle API key** (for downloading the EuroSAT dataset)
+- A **Gemini API key** (for the AI-generated explanations)
 
-The model generates a predicted class (e.g., forests) along with a confidence score (e.g., 95%). The AI system then converts this information into a natural language explanation.
-
-This allows users, including non-technical audiences, to easily understand the model’s decision-making process.
+The final cells launch the Gradio interface, giving you a live, shareable link to try the model interactively.
